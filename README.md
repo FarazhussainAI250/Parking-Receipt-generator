@@ -1,7 +1,7 @@
 # Parking-Receipt-generator
-<img width="1579" height="719" alt="PARKING" src="https://github.com/user-attachments/assets/d2cc909a-d730-4297-9fad-6edb6ddeedc0" />
 
 
+<img width="1579" height="719" alt="PARKING" src="https://github.com/user-attachments/assets/dff07ef5-0352-4d8f-8422-425f64f29d50" />
 
 
  Parking Receipt Web App
