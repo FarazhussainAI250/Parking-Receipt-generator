@@ -174,7 +174,7 @@ if 'clear_form' not in st.session_state:
     st.session_state.clear_form = False
 
 st.title("Nadra Registration Office — Parking Receipt")
-st.write("Fill vehicle details and driver name, then click **Generate Receipt**. Fee is fixed at Rs 30.")
+st.write("Fill the input fields.")
 
 with st.form("entry_form", clear_on_submit=True):
     col1, col2, col3 = st.columns([2,2,3])
@@ -255,4 +255,5 @@ else:
     st.write("No entries found for selected criteria.")
 
 st.markdown("*Use sidebar to filter entries by date • Fullscreen icon (⛶) available in table*")
+
 
