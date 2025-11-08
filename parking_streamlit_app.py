@@ -6,7 +6,16 @@ import io
 # ---------- Configuration ----------
 DB_PATH = "parking_entries.db"
 DEPARTMENT_NAME = "Nadra Registration Office"
-PARKING_FEE = 30
+
+# Auto fee system based on vehicle type
+def get_parking_fee(vehicle_type):
+    fees = {
+        "Car": 50,
+        "Motorcycle": 30,
+        "Rickshaw": 20,
+        "Other": 50
+    }
+    return fees.get(vehicle_type, 50)
 
 st.set_page_config(page_title="Nadra Registration Office", layout="wide")
 
@@ -34,7 +43,8 @@ st.markdown("""
 #bottom-footer {
     position: fixed;
     bottom: 10px;
-    left: 20px;
+    left: 50%;
+    transform: translateX(-50%);
     background-color: rgba(0,0,0,0.5);
     padding: 6px 14px;
     border-radius: 6px;
@@ -182,6 +192,7 @@ with st.form("entry_form", clear_on_submit=True):
         vehicle = st.text_input("Vehicle Number (LEA1234)", max_chars=20, value="" if st.session_state.clear_form else st.session_state.get('vehicle', ''))
     with col2:
         vehicle_type = st.selectbox("Vehicle Type", ["Car", "Motorcycle", "Rickshaw", "Other"], index=0 if st.session_state.clear_form else st.session_state.get('vehicle_type_idx', 0))
+        st.write(f"Fee: Rs {get_parking_fee(vehicle_type)}")
     with col3:
         driver = st.text_input("Driver Name", max_chars=50, value="" if st.session_state.clear_form else st.session_state.get('driver', ''))
     submitted = st.form_submit_button("Generate Receipt")
@@ -194,8 +205,9 @@ if submitted:
         st.error("Please enter Driver Name.")
         st.session_state.clear_form = False
     else:
-        entry_id, entry_time = add_entry(vehicle.strip(), vehicle_type, driver.strip(), PARKING_FEE)
-        receipt_text, receipt_no = make_receipt_text(entry_id, vehicle.strip().upper(), vehicle_type, driver.strip(), entry_time, PARKING_FEE)
+        parking_fee = get_parking_fee(vehicle_type)
+        entry_id, entry_time = add_entry(vehicle.strip(), vehicle_type, driver.strip(), parking_fee)
+        receipt_text, receipt_no = make_receipt_text(entry_id, vehicle.strip().upper(), vehicle_type, driver.strip(), entry_time, parking_fee)
         st.success(f"Receipt generated — {receipt_no}")
         st.code(receipt_text, language="text")
         b = receipt_text.encode("utf-8")
@@ -218,6 +230,21 @@ if st.session_state.clear_form:
 
 # Sidebar for viewing options
 with st.sidebar:
+    st.header("📋 Instructions")
+    st.write("**How to use:**")
+    st.write("1. Enter vehicle number (e.g., LEA1234)")
+    st.write("2. Select vehicle type from dropdown")
+    st.write("3. Enter driver name")
+    st.write("4. Click 'Generate Receipt'")
+    st.write("5. Print or download receipt")
+    
+    st.write("**Parking Fees:**")
+    st.write("• Car: Rs 50")
+    st.write("• Motorcycle: Rs 30")
+    st.write("• Rickshaw: Rs 20")
+    st.write("• Other: Rs 50")
+    
+    st.markdown("---")
     st.header("📅 View Entries")
     view_option = st.radio("Select View:", ["Recent (5)", "Today's Entries", "Select Date", "All Entries"])
     
