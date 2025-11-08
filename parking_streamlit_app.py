@@ -255,5 +255,3 @@ else:
     st.write("No entries found for selected criteria.")
 
 st.markdown("*Use sidebar to filter entries by date • Fullscreen icon (⛶) available in table*")
-
-
